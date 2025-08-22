@@ -5,4 +5,7 @@ type User struct {
 	FullName string `gorm:"not null"`
 	Email    string `gorm:"not null"`
 	Password string `gorm:"not null"`
+
+	//Relation
+	Sensor []Sensor `gorm:"foreignKey:SensorID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

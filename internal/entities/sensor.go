@@ -5,6 +5,7 @@ type Sensor struct {
 	ID1        string `gorm:"type:Varchar(1);not null;index"`
 	ID2        int    `gorm:"not null;index"`
 	SensorType string `gorm:"not null"`
+	UserID     int
 
 	//Relation
 	Reports []SensorReport `gorm:"foreignKey:SensorID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
