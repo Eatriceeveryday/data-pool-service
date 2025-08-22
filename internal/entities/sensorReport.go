@@ -1,10 +1,14 @@
 package entities
 
-import "time"
+import (
+	"time"
+)
 
 type SensorReport struct {
-	ReportID    int       `gorm:"primaryKey,autoIncrement"`
+	ReportID    uint      `gorm:"primaryKey;autoIncrement;index"`
 	SensorValue float32   `gorm:"not null"`
 	Timestamp   time.Time `gorm:"not null"`
-	SensorID    int       `gorm:"not null;index"`
+
+	//Relation
+	SensorID uint `gorm:"not null;index"`
 }
