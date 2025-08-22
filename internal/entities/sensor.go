@@ -1,11 +1,8 @@
 package entities
 
-import "time"
-
 type Sensor struct {
-	ID1         string `gorm:"type:Varchar(1);not null"`
-	ID2         int
-	SensorType  string
-	SensorValue float32
-	Timestamp   time.Time
+	SensorID   int    `gorm:"primaryKey,autoIncrement"`
+	ID1        string `gorm:"type:Varchar(1);not null;index"`
+	ID2        int    `gorm:"not null;index"`
+	SensorType string `gorm:"not null"`
 }
