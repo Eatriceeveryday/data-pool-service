@@ -30,7 +30,7 @@ func (s *UserService) CreateUser(user entities.User) (uint, error) {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 			return 0, gorm.ErrDuplicatedKey
 		}
-		return 0, err
+		return 0, result.Error
 	}
 
 	return user.UserID, nil
