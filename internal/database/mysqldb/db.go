@@ -16,7 +16,9 @@ func ConnectToDatabase(cfg *config.Config) (*gorm.DB, error) {
 		cfg.DBUsername, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		TranslateError: true,
+	})
 
 	if err != nil {
 		return nil, err
