@@ -233,6 +233,18 @@ func (s *SensorService) DeleteSensorReportByDuration(sensorId []uint, start time
 	return nil
 }
 
+func (s *SensorService) DeleteSensorReportByIdandDuration(sensorId uint, start time.Time, end time.Time) error {
+	start = start.UTC()
+	end = end.UTC()
+
+	result := s.mdb.Where("sensor_id = ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).Delete(&entities.SensorReport{})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
 func createApiKey(sensorId uint) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": sensorId,
