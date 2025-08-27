@@ -215,6 +215,15 @@ func (s *SensorService) UpdateSensorValueByIDandDuration(sensorId uint, start ti
 	return nil
 }
 
+func (s *SensorService) DeleteSensorReportByID(sensorId uint) error {
+	result := s.mdb.Where("sensor_id = ?", sensorId).Delete(&entities.SensorReport{})
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
 func createApiKey(sensorId uint) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": sensorId,
