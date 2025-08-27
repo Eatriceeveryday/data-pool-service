@@ -191,6 +191,18 @@ func (s *SensorService) UpdateSensorValueById(sensorId uint, newValue float32) e
 	return nil
 }
 
+func (s *SensorService) UpdateSensorValueByDuration(sensorId []uint, start time.Time, end time.Time, newValue float32) error {
+	start = start.UTC()
+	end = end.UTC()
+	result := s.mdb.Model(&entities.SensorReport{}).Where("sensor_id IN ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).Order("timestamp DESC").Update("sensor_value", newValue)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
 func createApiKey(sensorId uint) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": sensorId,
