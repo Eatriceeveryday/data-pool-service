@@ -65,6 +65,7 @@ func main() {
 	sensorGroup.GET("/reports", sensorHandler.GetSensorReportByID)
 	sensorGroup.GET("/reports/idandduration", sensorHandler.GetSensorReportByIDandDuration)
 	sensorGroup.GET("/reports/duration", sensorHandler.GetSensorReportByDuration)
+	sensorGroup.PUT("/reports", sensorHandler.UpdateSensorValueById)
 
 	e.Start(":9000")
 }
