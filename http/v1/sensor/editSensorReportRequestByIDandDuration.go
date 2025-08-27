@@ -1,0 +1,11 @@
+package sensor
+
+import "time"
+
+type EditSensorReportRequestByIDandDuration struct {
+	ID1   string    `json:"id1" validate:"required"`
+	ID2   int       `json:"id2" validate:"required"`
+	Start time.Time `json:"start" validate:"required"`
+	End   time.Time `json:"end" validate:"required"`
+	Value float32   `json:"value" validate:"required"`
+}
