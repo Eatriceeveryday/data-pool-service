@@ -87,6 +87,17 @@ func (s *SensorService) GetSensor(id1 string, id2 int, userId uint) (uint, error
 	return sensor.SensorID, nil
 }
 
+func (s *SensorService) GetAllUserSensor(userId uint) ([]entities.Sensor, error) {
+	var sensors []entities.Sensor
+
+	err := s.mdb.Select("sensor_id").Where("user_id = ?", userId).Find(&sensors).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return sensors, nil
+}
+
 func (s *SensorService) GetReportWithDuration(sensorId uint, start time.Time, end time.Time, page int) ([]entities.SensorReport, int64, error) {
 	var reports []entities.SensorReport
 	var total int64
@@ -128,7 +139,34 @@ func (s *SensorService) GetReportWithId(sensorId uint, page int) ([]entities.Sen
 
 	offset := (page - 1) * 25
 	err = s.mdb.Where("sensor_id = ? ", sensorId).
-		Order("timestamp DESC").
+		Order("timestamp ASC").
+		Limit(10).
+		Offset(offset).
+		Find(&reports).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return reports, total, nil
+}
+
+func (s *SensorService) GetReportByDuration(sensorId []uint, page int, start time.Time, end time.Time) ([]entities.SensorReport, int64, error) {
+	var reports []entities.SensorReport
+	var total int64
+
+	start = start.UTC()
+	end = end.UTC()
+
+	err := s.mdb.Model(&entities.SensorReport{}).
+		Where("sensor_id IN ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
+		Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	offset := (page - 1) * 25
+	err = s.mdb.Where("sensor_id IN ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
+		Order("timestamp ASC").
 		Limit(10).
 		Offset(offset).
 		Find(&reports).Error
