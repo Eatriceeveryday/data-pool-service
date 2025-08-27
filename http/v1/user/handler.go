@@ -79,7 +79,7 @@ func (h *UserHandler) Login(c echo.Context) error {
 
 func createToken(userId uint) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":  userId,
+		"id":  fmt.Sprintf("%d", userId),
 		"exp": time.Now().Add(time.Hour * 1).Unix(),
 		"iat": time.Now().Unix(),
 	})
