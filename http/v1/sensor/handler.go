@@ -210,3 +210,29 @@ func (h *SensorHandler) UpdateSensorValueByIDandDuration(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]any{"status": "Success"})
 }
+
+func (h *SensorHandler) DeleteSensorReportById(c echo.Context) error {
+	var req DeleteSensorReportByIDRequest
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	if err := h.v.Struct(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	sensorId, err := h.ss.GetSensor(req.ID1, req.ID2, c.Get("id").(uint))
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Something went wrong"})
+	}
+
+	err = h.ss.DeleteSensorReportByID(sensorId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Something went wrong"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{"status": "Success"})
+}
