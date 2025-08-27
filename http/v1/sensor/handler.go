@@ -69,3 +69,30 @@ func (h *SensorHandler) GetSensorReportByID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]any{"status": "Success", "total": newPage, "data": reports})
 }
+
+func (h *SensorHandler) GetSensorReportByDuration(c echo.Context) error {
+	var req getSensorReportRequestByDuration
+	page, err := strconv.Atoi(c.QueryParam("p"))
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request params"})
+	}
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	if err := h.v.Struct(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	sensorId, err := h.ss.GetSensor(req.ID1, req.ID2, c.Get("id").(uint))
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Something went wrong"})
+	}
+
+	reports, newPage, err := h.ss.GetReportWithDuration(sensorId, req.Start, req.End, page)
+
+	return c.JSON(http.StatusOK, map[string]any{"status": "Success", "total": newPage, "data": reports})
+}

@@ -91,6 +91,10 @@ func (s *SensorService) GetReportWithDuration(sensorId uint, start time.Time, en
 	var reports []entities.SensorReport
 	var total int64
 
+	start = start.UTC()
+	end = end.UTC()
+
+	fmt.Println("Querying reports between", start, "and", end)
 	err := s.mdb.Model(&entities.SensorReport{}).
 		Where("sensor_id = ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
 		Count(&total).Error
@@ -100,7 +104,7 @@ func (s *SensorService) GetReportWithDuration(sensorId uint, start time.Time, en
 
 	offset := (page - 1) * 25
 	err = s.mdb.Where("sensor_id = ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
-		Order("timestamp DESC").
+		Order("timestamp ASC").
 		Limit(10).
 		Offset(offset).
 		Find(&reports).Error
