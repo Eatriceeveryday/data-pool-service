@@ -148,3 +148,37 @@ func (h *SensorHandler) UpdateSensorValueById(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]any{"status": "Success"})
 }
+
+func (h *SensorHandler) UpdateSensorValueByDuration(c echo.Context) error {
+	var req EditSensorReportRequestByDuration
+
+	if err := c.Bind(&req); err != nil {
+		fmt.Println("here 1")
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	if err := h.v.Struct(req); err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request body"})
+	}
+
+	sensors, err := h.ss.GetAllUserSensor(c.Get("id").(uint))
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Something went wrong"})
+	}
+
+	var ids []uint
+
+	for _, sensor := range sensors {
+		ids = append(ids, sensor.SensorID)
+	}
+
+	err = h.ss.UpdateSensorValueByDuration(ids, req.Start, req.End, req.Value)
+	if err != nil {
+		fmt.Println(err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Something went wrong"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{"status": "Success"})
+}
