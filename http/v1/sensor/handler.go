@@ -70,8 +70,8 @@ func (h *SensorHandler) GetSensorReportByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]any{"status": "Success", "total": newPage, "data": reports})
 }
 
-func (h *SensorHandler) GetSensorReportByDuration(c echo.Context) error {
-	var req getSensorReportRequestByDuration
+func (h *SensorHandler) GetSensorReportByIDandDuration(c echo.Context) error {
+	var req getSensorReportRequestByIDandDuration
 	page, err := strconv.Atoi(c.QueryParam("p"))
 
 	if err != nil {

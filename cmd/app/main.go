@@ -63,7 +63,7 @@ func main() {
 
 	sensorGroup.POST("", sensorHandler.CreateSensor)
 	sensorGroup.GET("/reports", sensorHandler.GetSensorReportByID)
-	sensorGroup.GET("/reports/duration", sensorHandler.GetSensorReportByDuration)
+	sensorGroup.GET("/reports/duration", sensorHandler.GetSensorReportByIDandDuration)
 
 	e.Start(":9000")
 }
