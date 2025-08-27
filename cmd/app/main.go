@@ -69,6 +69,7 @@ func main() {
 	sensorGroup.PUT("/reports/duration", sensorHandler.UpdateSensorValueByDuration)
 	sensorGroup.PUT("/reports/idandduration", sensorHandler.UpdateSensorValueByIDandDuration)
 	sensorGroup.DELETE("/reports", sensorHandler.DeleteSensorReportById)
+	sensorGroup.DELETE("/reports/duration", sensorHandler.DeleteSensorReportByDuration)
 
 	e.Start(":9000")
 }
