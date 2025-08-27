@@ -13,7 +13,7 @@ var db *gorm.DB
 func ConnectToDatabase(cfg *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.DBUsername, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName,
+		cfg.MYSQLDBUsername, cfg.MYSQLDBPassword, cfg.MYSQLDBHost, cfg.MYSQLDBPort, cfg.MYSQLDBName,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
