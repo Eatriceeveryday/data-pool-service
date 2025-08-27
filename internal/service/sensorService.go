@@ -116,7 +116,7 @@ func (s *SensorService) GetReportWithDuration(sensorId uint, start time.Time, en
 	offset := (page - 1) * 25
 	err = s.mdb.Where("sensor_id = ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
 		Order("timestamp ASC").
-		Limit(10).
+		Limit(25).
 		Offset(offset).
 		Find(&reports).Error
 	if err != nil {
@@ -140,7 +140,7 @@ func (s *SensorService) GetReportWithId(sensorId uint, page int) ([]entities.Sen
 	offset := (page - 1) * 25
 	err = s.mdb.Where("sensor_id = ? ", sensorId).
 		Order("timestamp ASC").
-		Limit(10).
+		Limit(25).
 		Offset(offset).
 		Find(&reports).Error
 	if err != nil {
@@ -167,7 +167,7 @@ func (s *SensorService) GetReportByDuration(sensorId []uint, page int, start tim
 	offset := (page - 1) * 25
 	err = s.mdb.Where("sensor_id IN ? AND timestamp BETWEEN ? AND ?", sensorId, start, end).
 		Order("timestamp ASC").
-		Limit(10).
+		Limit(25).
 		Offset(offset).
 		Find(&reports).Error
 	if err != nil {
